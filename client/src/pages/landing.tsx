@@ -1,6 +1,6 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
-import arcuDaysLogo from "@assets/arcu days 2025.png";
+import arcuDaysLogo from "@assets/Copy of Copy of ARCU BANNER (50 x 50 mm).png";
 
 const LandingPage = () => {
   return (
@@ -11,7 +11,7 @@ const LandingPage = () => {
           className="absolute inset-0 bg-cover bg-center" 
           style={{ 
             backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6))`,
-            backgroundColor: "#5E35B1",
+            backgroundColor: "#000080", // Midnight Blue
           }}
         />
         
@@ -75,7 +75,7 @@ const LandingPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#5E35B1] text-white py-6">
+      <footer className="bg-[#000080] text-white py-6">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">

@@ -1,7 +1,7 @@
 import { useAuth } from "@/lib/auth";
 import { Button } from "@/components/ui/button";
 import { Link, useLocation } from "wouter";
-import arcuDaysLogo from "@assets/arcu days 2025.png";
+import arcuDaysLogo from "@assets/Copy of Copy of ARCU BANNER (50 x 50 mm).png";
 import { LogOut } from "lucide-react";
 
 const AdminNavbar = () => {
@@ -26,7 +26,7 @@ const AdminNavbar = () => {
   };
 
   return (
-    <div className="bg-[#5E35B1] text-white shadow-md">
+    <div className="bg-[#000080] text-white shadow-md">
       {/* Admin Header */}
       <div className="container mx-auto px-4 py-3 flex justify-between items-center">
         <div className="flex items-center">
@@ -57,8 +57,8 @@ const AdminNavbar = () => {
                   variant="ghost"
                   className={`px-4 py-3 font-medium whitespace-nowrap ${
                     isActive(link.path)
-                      ? "text-[#5E35B1] border-b-2 border-[#5E35B1]"
-                      : "text-gray-500 hover:text-[#5E35B1]"
+                      ? "text-[#000080] border-b-2 border-[#000080]"
+                      : "text-gray-500 hover:text-[#000080]"
                   }`}
                 >
                   <span className="material-icons text-sm mr-1">{link.icon}</span>

@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import { Card, CardContent } from "@/components/ui/card";
@@ -17,7 +17,7 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import arcuDaysLogo from "@assets/arcu days 2025.png";
+import arcuDaysLogo from "@assets/Copy of Copy of ARCU BANNER (50 x 50 mm).png";
 import { Link } from "wouter";
 
 const loginSchema = z.object({
@@ -41,10 +41,11 @@ const AdminLogin = () => {
   });
 
   // Redirect if already authenticated
-  if (isAuthenticated) {
-    navigate("/admin");
-    return null;
-  }
+  useEffect(() => {
+    if (isAuthenticated) {
+      navigate("/admin");
+    }
+  }, [isAuthenticated, navigate]);
 
   const onSubmit = async (data: LoginFormValues) => {
     setError("");
@@ -71,7 +72,7 @@ const AdminLogin = () => {
                 />
               </div>
             </Link>
-            <h1 className="text-2xl font-bold text-center text-[#5E35B1]">Admin Login</h1>
+            <h1 className="text-2xl font-bold text-center text-[#000080]">Admin Login</h1>
             <p className="text-sm text-gray-500 mt-1">USTP Claveria ArCu Days 2025</p>
           </div>
 
@@ -113,7 +114,7 @@ const AdminLogin = () => {
 
               <Button 
                 type="submit" 
-                className="w-full bg-[#5E35B1] hover:bg-opacity-90" 
+                className="w-full bg-[#000080] hover:bg-opacity-90" 
                 disabled={isLoading}
               >
                 {isLoading ? (
@@ -130,7 +131,7 @@ const AdminLogin = () => {
 
           <div className="mt-6 text-center">
             <Link href="/">
-              <Button variant="link" className="text-[#5E35B1]">
+              <Button variant="link" className="text-[#000080]">
                 Back to home page
               </Button>
             </Link>

@@ -18,21 +18,13 @@ function App() {
         <Route path="/" component={LandingPage} />
         <Route path="/scoreboard" component={ScoreboardPage} />
         <Route path="/admin/login" component={AdminLogin} />
-        <Route path="/admin">
-          {(params) => (
-            <AdminLayout>
-              <Switch>
-                <Route path="/admin" component={ScoreManagement} />
-                <Route path="/admin/scores" component={ScoreManagement} />
-                <Route path="/admin/medals" component={MedalManagement} />
-                <Route path="/admin/teams" component={TeamManagement} />
-                <Route path="/admin/events" component={EventManagement} />
-                <Route path="/admin/publish" component={PublishScores} />
-                <Route component={NotFound} />
-              </Switch>
-            </AdminLayout>
-          )}
-        </Route>
+        {/* Admin routes */}
+        <Route path="/admin" component={() => <AdminLayout><ScoreManagement /></AdminLayout>} />
+        <Route path="/admin/scores" component={() => <AdminLayout><ScoreManagement /></AdminLayout>} />
+        <Route path="/admin/medals" component={() => <AdminLayout><MedalManagement /></AdminLayout>} />
+        <Route path="/admin/teams" component={() => <AdminLayout><TeamManagement /></AdminLayout>} />
+        <Route path="/admin/events" component={() => <AdminLayout><EventManagement /></AdminLayout>} />
+        <Route path="/admin/publish" component={() => <AdminLayout><PublishScores /></AdminLayout>} />
         <Route component={NotFound} />
       </Switch>
     </AuthProvider>

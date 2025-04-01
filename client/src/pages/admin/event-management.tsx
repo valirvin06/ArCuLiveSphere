@@ -13,6 +13,7 @@ import {
 import { useEvents } from '@/hooks/use-events';
 import { apiRequest } from '@/lib/queryClient';
 import { queryClient } from '@/lib/queryClient';
+import { useQuery } from '@tanstack/react-query';
 import { useToast } from '@/hooks/use-toast';
 import { Loader2, Trash2 } from 'lucide-react';
 import {
@@ -54,7 +55,7 @@ const EventManagement = () => {
   const { data: eventsData, isLoading: eventsLoading } = useEvents();
   
   // Get categories from backend
-  const { data: categories, isLoading: categoriesLoading } = useQuery({
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<any[]>({
     queryKey: ['/api/categories'],
   });
   
@@ -176,7 +177,7 @@ const EventManagement = () => {
   return (
     <Card>
       <CardContent className="p-6">
-        <h2 className="text-2xl font-montserrat font-semibold mb-6 text-[#5E35B1]">Event Management</h2>
+        <h2 className="text-2xl font-montserrat font-semibold mb-6 text-[#000080]">Event Management</h2>
         
         <div className="flex flex-col md:flex-row gap-6">
           {/* Add New Event */}
@@ -240,7 +241,7 @@ const EventManagement = () => {
                 
                 <Button 
                   type="submit" 
-                  className="w-full bg-[#5E35B1] hover:bg-opacity-90" 
+                  className="w-full bg-[#000080] hover:bg-opacity-90" 
                   disabled={isSubmitting}
                 >
                   {isSubmitting ? (
@@ -282,7 +283,7 @@ const EventManagement = () => {
             
             {eventsLoading || categoriesLoading ? (
               <div className="flex items-center justify-center h-40">
-                <Loader2 className="h-8 w-8 text-[#5E35B1] animate-spin" />
+                <Loader2 className="h-8 w-8 text-[#000080] animate-spin" />
               </div>
             ) : (
               <div className="overflow-x-auto rounded-lg border">
