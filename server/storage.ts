@@ -83,6 +83,7 @@ export class MemStorage implements IStorage {
   private medalsData: Map<number, Medal>;
   private publicationsData: Map<number, Publication>;
   private scoreSettingsData: ScoreSettings | undefined;
+  private publishedMedalIds: Set<number>; // Track which medals have been published
 
   private currentUserId: number;
   private currentTeamId: number;
@@ -98,6 +99,7 @@ export class MemStorage implements IStorage {
     this.eventsData = new Map();
     this.medalsData = new Map();
     this.publicationsData = new Map();
+    this.publishedMedalIds = new Set(); // Initialize empty set
 
     this.currentUserId = 1;
     this.currentTeamId = 1;
@@ -288,6 +290,11 @@ export class MemStorage implements IStorage {
 
     if (existingMedal) {
       // If there's an existing medal, update it and return
+      // Remove from published set if it was published, as it's now changed
+      if (this.publishedMedalIds.has(existingMedal.id)) {
+        this.publishedMedalIds.delete(existingMedal.id);
+      }
+      
       const updatedMedal: Medal = { ...existingMedal, medalType: medal.medalType, points: medal.points };
       this.medalsData.set(existingMedal.id, updatedMedal);
       return updatedMedal;
@@ -296,10 +303,16 @@ export class MemStorage implements IStorage {
     const id = this.currentMedalId++;
     const newMedal: Medal = { ...medal, id, createdAt: new Date() };
     this.medalsData.set(id, newMedal);
+    // New medals are unpublished by default
     return newMedal;
   }
 
   async deleteMedal(id: number): Promise<boolean> {
+    // Remove from published set if it was published
+    if (this.publishedMedalIds.has(id)) {
+      this.publishedMedalIds.delete(id);
+    }
+    
     return this.medalsData.delete(id);
   }
 
@@ -347,6 +360,11 @@ export class MemStorage implements IStorage {
 
     const unpublishedMedals = await this.getUnpublishedChanges();
     
+    // Mark all medals as published
+    for (const medal of unpublishedMedals) {
+      this.publishedMedalIds.add(medal.id);
+    }
+    
     // Create a publication record
     await this.createPublication({
       publishedBy: "arcuadmin",
@@ -367,12 +385,15 @@ export class MemStorage implements IStorage {
   // Scoreboard Data
   async getTeamScores(): Promise<TeamScore[]> {
     const teams = await this.getAllTeams();
-    const medals = await this.getAllMedals();
+    let medals = await this.getAllMedals();
     const settings = await this.getScoreSettings();
 
     if (!settings) {
       throw new Error("Score settings not initialized");
     }
+
+    // Only use published medals for public display
+    medals = medals.filter(medal => this.publishedMedalIds.has(medal.id));
 
     const teamScores: TeamScore[] = teams.map(team => {
       const teamMedals = medals.filter(medal => medal.teamId === team.id);
@@ -424,7 +445,10 @@ export class MemStorage implements IStorage {
     const allEvents = await this.getAllEvents();
     const allCategories = await this.getAllEventCategories();
     const allTeams = await this.getAllTeams();
-    const allMedals = await this.getAllMedals();
+    let allMedals = await this.getAllMedals();
+    
+    // Only use published medals for public display
+    allMedals = allMedals.filter(medal => this.publishedMedalIds.has(medal.id));
 
     return allEvents.map(event => {
       const category = allCategories.find(c => c.id === event.categoryId);
@@ -453,7 +477,10 @@ export class MemStorage implements IStorage {
   }
 
   async getMedalSummary(): Promise<MedalSummary> {
-    const medals = await this.getAllMedals();
+    let medals = await this.getAllMedals();
+    
+    // Only use published medals for public display
+    medals = medals.filter(medal => this.publishedMedalIds.has(medal.id));
     
     const goldCount = medals.filter(medal => medal.medalType === 'GOLD').length;
     const silverCount = medals.filter(medal => medal.medalType === 'SILVER').length;
@@ -468,9 +495,9 @@ export class MemStorage implements IStorage {
   }
 
   async getUnpublishedChanges(): Promise<Medal[]> {
-    // Just return all medals for now since we don't track what's published
-    // In a real DB, we'd track which medals were new since last publication
-    return await this.getAllMedals();
+    const allMedals = await this.getAllMedals();
+    // Return medals that are not in the publishedMedalIds set
+    return allMedals.filter(medal => !this.publishedMedalIds.has(medal.id));
   }
 }
 

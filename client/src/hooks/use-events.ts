@@ -20,14 +20,18 @@ export type EventResult = {
   bronzeTeam?: { id: number; name: string };
 };
 
-export const useEvents = () => {
+export const useEvents = (options = {}) => {
   return useQuery<Event[]>({
     queryKey: ['/api/events'],
+    refetchInterval: 5000, // Auto-refresh every 5 seconds
+    ...options
   });
 };
 
-export const useEventResults = () => {
+export const useEventResults = (options = {}) => {
   return useQuery<EventResult[]>({
     queryKey: ['/api/events/results'],
+    refetchInterval: 5000, // Auto-refresh every 5 seconds
+    ...options
   });
 };
