@@ -11,7 +11,7 @@ const LandingPage = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center" 
           style={{ 
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${arcuDaysBg})`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.8), rgba(0,0,0,0.8)), url(${arcuDaysBg})`,
             backgroundColor: "#000080", // Midnight Blue
           }}
         />
