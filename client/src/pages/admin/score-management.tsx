@@ -157,11 +157,11 @@ const ScoreManagement = () => {
   return (
     <Card>
       <CardContent className="p-6">
-        <h2 className="text-2xl font-montserrat font-semibold mb-6 text-[#5E35B1]">Score Management</h2>
+        <h2 className="text-2xl font-montserrat font-semibold mb-6 text-[#000080]">Score Management</h2>
         
         {isLoading ? (
           <div className="flex items-center justify-center h-40">
-            <Loader2 className="h-8 w-8 text-[#5E35B1] animate-spin" />
+            <Loader2 className="h-8 w-8 text-[#000080] animate-spin" />
           </div>
         ) : (
           <>
@@ -306,7 +306,7 @@ const ScoreManagement = () => {
                   </Button>
                   <Button
                     type="button"
-                    className="bg-[#5E35B1] hover:bg-opacity-90"
+                    className="bg-[#000080] hover:bg-opacity-90"
                     onClick={handleSubmit}
                     disabled={isSubmitting}
                   >

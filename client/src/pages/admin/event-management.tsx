@@ -98,7 +98,7 @@ const EventManagement = () => {
       await apiRequest('POST', '/api/events', {
         name: eventName.trim(),
         categoryId: isNaN(categoryId) ? undefined : categoryId,
-        eventDate: eventDate ? new Date(eventDate).toISOString() : undefined,
+        eventDate: eventDate ? new Date(eventDate) : undefined,
         status: 'UPCOMING'
       });
       

@@ -38,7 +38,7 @@ const LandingPage = () => {
               <Link href="/scoreboard">
                 <Button 
                   size="lg" 
-                  className="bg-[#E91E63] hover:bg-opacity-90 text-white px-8 py-3 rounded-full text-lg font-semibold inline-flex items-center shadow-lg transition-all duration-300 font-montserrat mr-4"
+                  className="bg-[#000080] hover:bg-opacity-90 text-white px-8 py-3 rounded-full text-lg font-semibold inline-flex items-center shadow-lg transition-all duration-300 font-montserrat mr-4"
                 >
                   <span>Live Scores</span>
                   <span className="material-icons ml-2">leaderboard</span>

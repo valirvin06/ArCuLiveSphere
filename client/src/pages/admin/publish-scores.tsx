@@ -16,6 +16,7 @@ import {
 } from "@/components/ui/table";
 import { useTeams } from '@/hooks/use-teams';
 import { useEvents } from '@/hooks/use-events';
+import { Medal, Publication, ScoreSettings } from '@shared/schema';
 
 const PublishScores = () => {
   const { toast } = useToast();
@@ -24,15 +25,15 @@ const PublishScores = () => {
   const { data: teams } = useTeams();
   const { data: events } = useEvents();
   
-  const { data: scoreSettings, isLoading: settingsLoading } = useQuery({
+  const { data: scoreSettings = { lastUpdated: null, isPublished: false }, isLoading: settingsLoading } = useQuery<ScoreSettings>({
     queryKey: ['/api/score-settings'],
   });
   
-  const { data: unpublishedChanges, isLoading: changesLoading } = useQuery({
+  const { data: unpublishedChanges = [], isLoading: changesLoading } = useQuery<Medal[]>({
     queryKey: ['/api/unpublished-changes'],
   });
   
-  const { data: publications, isLoading: publicationsLoading } = useQuery({
+  const { data: publications = [], isLoading: publicationsLoading } = useQuery<Publication[]>({
     queryKey: ['/api/publications'],
   });
   
@@ -103,11 +104,11 @@ const PublishScores = () => {
   return (
     <Card>
       <CardContent className="p-6">
-        <h2 className="text-2xl font-montserrat font-semibold mb-6 text-[#5E35B1]">Publish Scores</h2>
+        <h2 className="text-2xl font-montserrat font-semibold mb-6 text-[#000080]">Publish Scores</h2>
         
         {isLoading ? (
           <div className="flex items-center justify-center h-40">
-            <Loader2 className="h-8 w-8 text-[#5E35B1] animate-spin" />
+            <Loader2 className="h-8 w-8 text-[#000080] animate-spin" />
           </div>
         ) : (
           <div className="mb-8">
@@ -142,7 +143,7 @@ const PublishScores = () => {
                   </TableHeader>
                   <TableBody>
                     {unpublishedChanges && unpublishedChanges.length > 0 ? (
-                      unpublishedChanges.map((medal: any) => (
+                      unpublishedChanges.map((medal) => (
                         <TableRow key={medal.id}>
                           <TableCell className="font-medium">{getTeamName(medal.teamId)}</TableCell>
                           <TableCell>{getEventName(medal.eventId)}</TableCell>
@@ -169,7 +170,7 @@ const PublishScores = () => {
             
             <div className="flex justify-center">
               <Button
-                className="px-8 py-3 bg-[#5E35B1] hover:bg-opacity-90 text-white rounded-lg font-medium inline-flex items-center"
+                className="px-8 py-3 bg-[#000080] hover:bg-opacity-90 text-white rounded-lg font-medium inline-flex items-center"
                 disabled={isPublishing || unpublishedChanges?.length === 0}
                 onClick={handlePublishScores}
               >
@@ -201,7 +202,7 @@ const PublishScores = () => {
                   </TableHeader>
                   <TableBody>
                     {publications && publications.length > 0 ? (
-                      publications.map((pub: any) => (
+                      publications.map((pub) => (
                         <TableRow key={pub.id}>
                           <TableCell>{new Date(pub.publishedAt).toLocaleString()}</TableCell>
                           <TableCell>{pub.publishedBy}</TableCell>
