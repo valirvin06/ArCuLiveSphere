@@ -1,6 +1,7 @@
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
 import arcuDaysLogo from "@assets/Copy of Copy of ARCU BANNER (50 x 50 mm).png";
+import arcuDaysBg from "@assets/arcu days 2025.png";
 
 const LandingPage = () => {
   return (
@@ -10,7 +11,7 @@ const LandingPage = () => {
         <div 
           className="absolute inset-0 bg-cover bg-center" 
           style={{ 
-            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6))`,
+            backgroundImage: `linear-gradient(rgba(0,0,0,0.6), rgba(0,0,0,0.6)), url(${arcuDaysBg})`,
             backgroundColor: "#000080", // Midnight Blue
           }}
         />
@@ -85,7 +86,7 @@ const LandingPage = () => {
             </div>
             <div className="text-sm opacity-75">
               &copy; 2025 USTP Claveria. All rights reserved.<br />
-              Developed by Val Irvin F. Mabayo
+              Created on Replit by Val Irvin F. Mabayo
             </div>
           </div>
         </div>
