@@ -15,6 +15,7 @@ const AdminNavbar = () => {
     { name: "Team Management", path: "/admin/teams", icon: "groups" },
     { name: "Event Management", path: "/admin/events", icon: "event" },
     { name: "Publish Scores", path: "/admin/publish", icon: "publish" },
+    { name: "View Scoreboard", path: "/scoreboard", icon: "visibility", external: true },
   ];
 
   // Check if a link is active
@@ -52,19 +53,32 @@ const AdminNavbar = () => {
         <div className="container mx-auto px-4">
           <nav className="flex overflow-x-auto">
             {navLinks.map((link) => (
-              <Link key={link.path} href={link.path}>
-                <Button
-                  variant="ghost"
-                  className={`px-4 py-3 font-medium whitespace-nowrap ${
-                    isActive(link.path)
-                      ? "text-[#000080] border-b-2 border-[#000080]"
-                      : "text-gray-500 hover:text-[#000080]"
-                  }`}
-                >
-                  <span className="material-icons text-sm mr-1">{link.icon}</span>
-                  {link.name}
-                </Button>
-              </Link>
+              link.external ? (
+                <a key={link.path} href={link.path} target="_blank" rel="noopener noreferrer">
+                  <Button
+                    variant="ghost"
+                    className="px-4 py-3 font-medium whitespace-nowrap text-gray-500 hover:text-[#000080]"
+                  >
+                    <span className="material-icons text-sm mr-1">{link.icon}</span>
+                    {link.name}
+                    <span className="material-icons text-xs ml-1">open_in_new</span>
+                  </Button>
+                </a>
+              ) : (
+                <Link key={link.path} href={link.path}>
+                  <Button
+                    variant="ghost"
+                    className={`px-4 py-3 font-medium whitespace-nowrap ${
+                      isActive(link.path)
+                        ? "text-[#000080] border-b-2 border-[#000080]"
+                        : "text-gray-500 hover:text-[#000080]"
+                    }`}
+                  >
+                    <span className="material-icons text-sm mr-1">{link.icon}</span>
+                    {link.name}
+                  </Button>
+                </Link>
+              )
             ))}
           </nav>
         </div>

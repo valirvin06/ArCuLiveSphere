@@ -272,9 +272,9 @@ const TeamManagement = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 {teams.map((team) => (
                   <div key={team.id} className="bg-gray-50 rounded-lg p-4 flex items-center">
-                    <div className={`flex-shrink-0 h-12 w-12 ${team.color ? `bg-${team.color}-100` : 'bg-blue-100'} rounded-full flex items-center justify-center mr-4`}>
+                    <div className={`flex-shrink-0 h-12 w-12 ${team.color ? `bg-${team.color}-100` : 'bg-blue-100'} rounded-full flex items-center justify-center mr-4 overflow-hidden`}>
                       {team.icon ? (
-                        <img src={team.icon} alt={team.name} className="h-6 w-6" />
+                        <img src={team.icon} alt={team.name} className="h-12 w-12 object-cover" />
                       ) : (
                         <span className={`material-icons ${team.color ? `text-${team.color}-500` : 'text-blue-500'}`}>
                           emoji_events

@@ -65,9 +65,9 @@ const OverallRankings = () => {
                   <td className="px-6 py-4 font-poppins font-semibold">{team.rank}</td>
                   <td className="px-6 py-4">
                     <div className="flex items-center">
-                      <div className={`h-10 w-10 rounded-full bg-${team.color || 'blue'}-100 flex items-center justify-center mr-3`}>
+                      <div className={`h-10 w-10 rounded-full bg-${team.color || 'blue'}-100 flex items-center justify-center mr-3 overflow-hidden`}>
                         {team.icon ? (
-                          <img src={team.icon} alt={team.name} className="h-6 w-6" />
+                          <img src={team.icon} alt={team.name} className="h-10 w-10 object-cover" />
                         ) : (
                           <span className={`material-icons text-${team.color || 'blue'}-500`}>emoji_events</span>
                         )}

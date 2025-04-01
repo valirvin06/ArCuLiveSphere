@@ -26,6 +26,7 @@ const ScoreManagement = () => {
   const [silverTeam, setSilverTeam] = useState<number | null>(null);
   const [bronzeTeam, setBronzeTeam] = useState<number | null>(null);
   const [nonWinners, setNonWinners] = useState<number[]>([]);
+  const [noEntries, setNoEntries] = useState<number[]>([]);
   const [isSubmitting, setIsSubmitting] = useState(false);
   
   // Reset form when event changes
@@ -34,21 +35,30 @@ const ScoreManagement = () => {
     setSilverTeam(null);
     setBronzeTeam(null);
     setNonWinners([]);
+    setNoEntries([]);
   }, [selectedEvent]);
   
   const isLoading = eventsLoading || teamsLoading;
   
-  // Get available teams (those not already selected for medals)
+  // Get available teams (those not already selected for medals, non-winners, or no entries)
   const getAvailableTeams = () => {
     if (!teams) return [];
     
     const selectedTeams = [goldTeam, silverTeam, bronzeTeam].filter(Boolean) as number[];
-    return teams.filter(team => !selectedTeams.includes(team.id));
+    return teams.filter(team => 
+      !selectedTeams.includes(team.id) && 
+      !nonWinners.includes(team.id) && 
+      !noEntries.includes(team.id)
+    );
   };
   
   // Add team to non-winners
   const addNonWinner = (teamId: number) => {
     if (!nonWinners.includes(teamId)) {
+      // Remove from no entries if present
+      if (noEntries.includes(teamId)) {
+        setNoEntries(noEntries.filter(id => id !== teamId));
+      }
       setNonWinners([...nonWinners, teamId]);
     }
   };
@@ -56,6 +66,22 @@ const ScoreManagement = () => {
   // Remove team from non-winners
   const removeNonWinner = (teamId: number) => {
     setNonWinners(nonWinners.filter(id => id !== teamId));
+  };
+  
+  // Add team to no entries
+  const addNoEntry = (teamId: number) => {
+    if (!noEntries.includes(teamId)) {
+      // Remove from non-winners if present
+      if (nonWinners.includes(teamId)) {
+        setNonWinners(nonWinners.filter(id => id !== teamId));
+      }
+      setNoEntries([...noEntries, teamId]);
+    }
+  };
+  
+  // Remove team from no entries
+  const removeNoEntry = (teamId: number) => {
+    setNoEntries(noEntries.filter(id => id !== teamId));
   };
   
   // Handle form submission
@@ -118,6 +144,16 @@ const ScoreManagement = () => {
         });
       }
       
+      // Add no-entry teams
+      for (const teamId of noEntries) {
+        medals.push({
+          eventId: selectedEvent,
+          teamId,
+          medalType: 'NO_ENTRY',
+          points: 0 // No points for no-entry
+        });
+      }
+      
       // Create medals one by one
       for (const medal of medals) {
         await apiRequest('POST', '/api/medals', medal);
@@ -132,6 +168,7 @@ const ScoreManagement = () => {
       setSilverTeam(null);
       setBronzeTeam(null);
       setNonWinners([]);
+      setNoEntries([]);
       
       // Invalidate queries
       queryClient.invalidateQueries({ queryKey: ['/api/medals'] });
@@ -288,6 +325,50 @@ const ScoreManagement = () => {
                   )}
                 </div>
                 
+                <div className="mt-4">
+                  <h4 className="text-sm font-medium text-gray-700 mb-2">No Entry Teams (0 points)</h4>
+                  
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-2 mb-4">
+                    {getAvailableTeams().filter(team => 
+                      !noEntries.includes(team.id) && 
+                      !nonWinners.includes(team.id)
+                    ).map(team => (
+                      <Button
+                        key={team.id}
+                        type="button"
+                        variant="outline"
+                        onClick={() => addNoEntry(team.id)}
+                        className="justify-start text-gray-500"
+                      >
+                        <span className="material-icons mr-2 text-sm">add</span>
+                        {team.name}
+                      </Button>
+                    ))}
+                  </div>
+                  
+                  {noEntries.length > 0 && (
+                    <div className="bg-gray-50 p-4 rounded-lg">
+                      <div className="flex flex-wrap gap-2">
+                        {noEntries.map(teamId => {
+                          const team = teams?.find(t => t.id === teamId);
+                          return team ? (
+                            <Badge key={teamId} variant="outline" className="flex items-center gap-1 px-3 py-2 text-gray-500">
+                              {team.name}
+                              <button
+                                type="button"
+                                onClick={() => removeNoEntry(teamId)}
+                                className="ml-1 text-gray-500 hover:text-gray-700 focus:outline-none"
+                              >
+                                <span className="material-icons text-sm">close</span>
+                              </button>
+                            </Badge>
+                          ) : null;
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+                
                 <div className="flex justify-end mt-6">
                   <Button
                     type="button"
@@ -299,6 +380,7 @@ const ScoreManagement = () => {
                       setSilverTeam(null);
                       setBronzeTeam(null);
                       setNonWinners([]);
+                      setNoEntries([]);
                     }}
                     disabled={isSubmitting}
                   >
