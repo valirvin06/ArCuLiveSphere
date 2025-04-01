@@ -13,11 +13,11 @@ import { useQuery } from "@tanstack/react-query";
 const EventsSummary = () => {
   const [selectedCategory, setSelectedCategory] = useState("all");
   
-  const { data: categories, isLoading: categoriesLoading } = useQuery({
+  const { data: categories = [], isLoading: categoriesLoading } = useQuery<any[]>({
     queryKey: ['/api/categories'],
   });
 
-  const { data: eventResults, isLoading: eventsLoading } = useQuery({
+  const { data: eventResults = [], isLoading: eventsLoading } = useQuery<any[]>({
     queryKey: ['/api/events/results'],
   });
 
@@ -65,7 +65,7 @@ const EventsSummary = () => {
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           {filteredEvents.map((event: any) => (
             <div key={event.id} className="bg-white rounded-lg shadow-md overflow-hidden">
-              <div className="bg-[#5E35B1] text-white px-6 py-4">
+              <div className="bg-[#000080] text-white px-6 py-4">
                 <h3 className="font-montserrat font-semibold text-lg">{event.name}</h3>
                 <p className="text-sm text-white text-opacity-80">{event.category}</p>
               </div>
@@ -125,7 +125,7 @@ const LoadingSkeleton = () => (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
       {[1, 2, 3, 4].map((i) => (
         <Card key={i}>
-          <div className="bg-[#5E35B1] text-white px-6 py-4">
+          <div className="bg-[#000080] text-white px-6 py-4">
             <Skeleton className="h-6 w-48 bg-white/20 mb-2" />
             <Skeleton className="h-4 w-24 bg-white/20" />
           </div>

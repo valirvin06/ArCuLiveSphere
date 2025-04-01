@@ -35,7 +35,7 @@ const OverallRankings = () => {
         <div className="overflow-x-auto">
           <table className="min-w-full">
             <thead>
-              <tr className="bg-[#5E35B1] text-white text-left">
+              <tr className="bg-[#000080] text-white text-left">
                 <th className="px-6 py-4 font-semibold">Rank</th>
                 <th className="px-6 py-4 font-semibold">Team</th>
                 <th className="px-6 py-4 font-semibold text-center">
@@ -103,7 +103,7 @@ const OverallRankings = () => {
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
         {/* Point System Legend */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 font-montserrat text-[#5E35B1]">Point System</h3>
+          <h3 className="text-lg font-semibold mb-4 font-montserrat text-[#000080]">Point System</h3>
           <div className="grid grid-cols-2 gap-4">
             <div className="flex items-center">
               <div className="w-8 h-8 rounded-full bg-[#FFD700] flex items-center justify-center mr-3">
@@ -140,7 +140,7 @@ const OverallRankings = () => {
         
         {/* Medal Counts */}
         <div className="bg-white rounded-lg shadow-md p-6">
-          <h3 className="text-lg font-semibold mb-4 font-montserrat text-[#5E35B1]">Total Medals Awarded</h3>
+          <h3 className="text-lg font-semibold mb-4 font-montserrat text-[#000080]">Total Medals Awarded</h3>
           <div className="flex flex-wrap justify-around">
             <div className="medal-animation text-center p-3">
               <div className="inline-block w-16 h-16 rounded-full bg-yellow-100 flex items-center justify-center mb-2">
@@ -175,7 +175,7 @@ const LoadingSkeleton = () => (
     <Card className="mb-8">
       <CardContent className="p-0">
         <div className="overflow-x-auto">
-          <div className="bg-[#5E35B1] text-white px-6 py-4">
+          <div className="bg-[#000080] text-white px-6 py-4">
             <div className="grid grid-cols-6 gap-4">
               <Skeleton className="h-6 w-10 bg-white/20" />
               <Skeleton className="h-6 w-20 bg-white/20" />

@@ -17,7 +17,7 @@ const ScoreboardPage = () => {
           <header className="mb-8">
             <div className="flex flex-col md:flex-row items-center justify-between mb-4">
               <div>
-                <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-[#5E35B1] text-center md:text-left">
+                <h2 className="text-3xl md:text-4xl font-bold font-montserrat text-[#000080] text-center md:text-left">
                   Live Scoreboard
                 </h2>
                 {isLoading ? (
@@ -32,7 +32,7 @@ const ScoreboardPage = () => {
                 <Link href="/">
                   <Button 
                     variant="outline" 
-                    className="bg-transparent border-[#5E35B1] text-[#5E35B1] hover:bg-[#5E35B1] hover:text-white"
+                    className="bg-transparent border-[#000080] text-[#000080] hover:bg-[#000080] hover:text-white"
                   >
                     <span className="material-icons mr-2 text-sm">home</span>
                     Back to Home
@@ -48,8 +48,8 @@ const ScoreboardPage = () => {
               <Button 
                 className={`px-5 py-3 text-sm font-medium rounded-l-lg ${
                   activeTab === 'overall' 
-                    ? 'bg-[#5E35B1] text-white' 
-                    : 'bg-white text-[#5E35B1] hover:bg-gray-100'
+                    ? 'bg-[#000080] text-white' 
+                    : 'bg-white text-[#000080] hover:bg-gray-100'
                 }`}
                 onClick={() => setActiveTab('overall')}
               >
@@ -58,8 +58,8 @@ const ScoreboardPage = () => {
               <Button 
                 className={`px-5 py-3 text-sm font-medium rounded-r-lg ${
                   activeTab === 'events' 
-                    ? 'bg-[#5E35B1] text-white' 
-                    : 'bg-white text-[#5E35B1] hover:bg-gray-100'
+                    ? 'bg-[#000080] text-white' 
+                    : 'bg-white text-[#000080] hover:bg-gray-100'
                 }`}
                 onClick={() => setActiveTab('events')}
               >
@@ -80,15 +80,17 @@ const ScoreboardPage = () => {
       </div>
 
       {/* Footer */}
-      <footer className="bg-[#5E35B1] text-white py-6">
+      <footer className="bg-[#000080] text-white py-6">
         <div className="container mx-auto px-4">
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <h3 className="text-xl font-semibold font-montserrat">USTP Claveria ArCu Days 2025</h3>
               <p className="text-sm opacity-75">University of Science and Technology of Southern Philippines Claveria</p>
+              <p className="text-sm opacity-75 mt-1">April 3-4, 2025</p>
             </div>
             <div className="text-sm opacity-75">
-              &copy; 2025 USTP Claveria. All rights reserved.
+              &copy; 2025 USTP Claveria. All rights reserved.<br />
+              Developed by Val Irvin F. Mabayo
             </div>
           </div>
         </div>

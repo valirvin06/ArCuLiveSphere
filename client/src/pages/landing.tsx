@@ -56,7 +56,7 @@ const LandingPage = () => {
             </div>
             
             <div className="mt-16 text-white">
-              <p className="text-lg">March 15-20, 2025</p>
+              <p className="text-lg">April 3-4, 2025</p>
               <p>USTP Claveria Campus</p>
             </div>
           </div>
@@ -81,9 +81,11 @@ const LandingPage = () => {
             <div className="mb-4 md:mb-0">
               <h3 className="text-xl font-semibold font-montserrat">USTP Claveria ArCu Days 2025</h3>
               <p className="text-sm opacity-75">University of Science and Technology of Southern Philippines Claveria</p>
+              <p className="text-sm opacity-75 mt-1">April 3-4, 2025</p>
             </div>
             <div className="text-sm opacity-75">
-              &copy; 2025 USTP Claveria. All rights reserved.
+              &copy; 2025 USTP Claveria. All rights reserved.<br />
+              Developed by Val Irvin F. Mabayo
             </div>
           </div>
         </div>
