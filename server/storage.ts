@@ -286,13 +286,15 @@ export class MemStorage implements IStorage {
   }
 
   async createMedal(medal: InsertMedal): Promise<Medal> {
-    // Make sure we don't duplicate medals for the same team and event
+    // Only update existing medal if it's the same type (GOLD, SILVER, BRONZE)
+    // For NON_WINNER, always create a new medal entry to allow multiple non-winner entries per team
     const existingMedal = Array.from(this.medalsData.values()).find(
-      m => m.eventId === medal.eventId && m.teamId === medal.teamId
+      m => m.eventId === medal.eventId && m.teamId === medal.teamId && 
+          (medal.medalType !== 'NON_WINNER' && m.medalType === medal.medalType)
     );
 
-    if (existingMedal) {
-      // If there's an existing medal, update it and return
+    if (existingMedal && medal.medalType !== 'NON_WINNER') {
+      // If there's an existing medal of the same type, update it and return
       // Remove from published set if it was published, as it's now changed
       if (this.publishedMedalIds.has(existingMedal.id)) {
         this.publishedMedalIds.delete(existingMedal.id);
@@ -437,11 +439,39 @@ export class MemStorage implements IStorage {
       return b.bronzeCount - a.bronzeCount;
     });
 
-    // Add rank
-    return teamScores.map((team, index) => ({
-      ...team,
-      rank: index + 1
-    }));
+    // Add rank with proper tie handling
+    let currentRank = 1;
+    let prevScore = -1;
+    let prevGold = -1;
+    let prevSilver = -1;
+    let prevBronze = -1;
+    let offset = 0;
+    
+    return teamScores.map((team, index) => {
+      // Check if this team has the same score as the previous team
+      if (index > 0 && 
+          team.totalScore === prevScore && 
+          team.goldCount === prevGold &&
+          team.silverCount === prevSilver &&
+          team.bronzeCount === prevBronze) {
+        // This is a tie, use the same rank
+        offset++;
+      } else {
+        // Not a tie, use current position accounting for previous ties
+        currentRank = index + 1;
+      }
+      
+      // Save current team's values for the next comparison
+      prevScore = team.totalScore;
+      prevGold = team.goldCount;
+      prevSilver = team.silverCount;
+      prevBronze = team.bronzeCount;
+      
+      return {
+        ...team,
+        rank: currentRank
+      };
+    });
   }
 
   async getEventResults(): Promise<EventResult[]> {

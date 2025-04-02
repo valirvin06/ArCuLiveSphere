@@ -146,20 +146,29 @@ export class PgStorage implements IStorage {
   }
 
   async createMedal(medal: InsertMedal): Promise<Medal> {
-    // Check if medal for this team and event already exists
-    const existingMedals = await db.select()
-      .from(schema.medals)
-      .where(
-        and(
-          eq(schema.medals.eventId, medal.eventId),
-          eq(schema.medals.teamId, medal.teamId)
-        )
-      );
+    // Only update existing medal if it's the same type (GOLD, SILVER, BRONZE)
+    // For NON_WINNER, always create a new medal entry to allow multiple non-winner entries per team
+    let existingMedal = null;
     
-    if (existingMedals.length > 0) {
+    if (medal.medalType !== 'NON_WINNER') {
+      // Check if medal of same type for this team and event already exists
+      const existingMedals = await db.select()
+        .from(schema.medals)
+        .where(
+          and(
+            eq(schema.medals.eventId, medal.eventId),
+            eq(schema.medals.teamId, medal.teamId),
+            eq(schema.medals.medalType, medal.medalType)
+          )
+        );
+        
+      if (existingMedals.length > 0) {
+        existingMedal = existingMedals[0];
+      }
+    }
+    
+    if (existingMedal && medal.medalType !== 'NON_WINNER') {
       // Update existing medal
-      const existingMedal = existingMedals[0];
-      
       // Remove from published medals if it was published (since it's now changed)
       await db.delete(schema.publishedMedals)
         .where(eq(schema.publishedMedals.medalId, existingMedal.id));
@@ -342,11 +351,39 @@ export class PgStorage implements IStorage {
       return b.bronzeCount - a.bronzeCount;
     });
     
-    // Add rank
-    return teamScores.map((team, index) => ({
-      ...team,
-      rank: index + 1
-    }));
+    // Add rank with proper tie handling
+    let currentRank = 1;
+    let prevScore = -1;
+    let prevGold = -1;
+    let prevSilver = -1;
+    let prevBronze = -1;
+    let offset = 0;
+    
+    return teamScores.map((team, index) => {
+      // Check if this team has the same score as the previous team
+      if (index > 0 && 
+          team.totalScore === prevScore && 
+          team.goldCount === prevGold &&
+          team.silverCount === prevSilver &&
+          team.bronzeCount === prevBronze) {
+        // This is a tie, use the same rank
+        offset++;
+      } else {
+        // Not a tie, use current position accounting for previous ties
+        currentRank = index + 1;
+      }
+      
+      // Save current team's values for the next comparison
+      prevScore = team.totalScore;
+      prevGold = team.goldCount;
+      prevSilver = team.silverCount;
+      prevBronze = team.bronzeCount;
+      
+      return {
+        ...team,
+        rank: currentRank
+      };
+    });
   }
 
   async getEventResults(): Promise<EventResult[]> {

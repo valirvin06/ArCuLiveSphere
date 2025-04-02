@@ -11,8 +11,12 @@ if (!DATABASE_URL) {
   throw new Error('Database URL not found');
 }
 
-// Create postgres client
-const client = postgres(DATABASE_URL);
+// Create postgres client with timezone config
+const client = postgres(DATABASE_URL, {
+  connection: {
+    timezone: 'Asia/Manila'
+  }
+});
 log('Connected to PostgreSQL database', 'postgres');
 
 // Create drizzle database instance
