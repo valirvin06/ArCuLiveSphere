@@ -4,7 +4,7 @@ import ScoreboardPage from "@/pages/scoreboard";
 import AdminLayout from "@/pages/admin/index";
 import AdminLogin from "@/pages/admin/login";
 import NotFound from "@/pages/not-found";
-import ScoreManagement from "@/pages/admin/score-management";
+import ScoreManagement from "@/pages/admin/score-management-fixed";
 import MedalManagement from "@/pages/admin/medal-management";
 import TeamManagement from "@/pages/admin/team-management";
 import EventManagement from "@/pages/admin/event-management";
