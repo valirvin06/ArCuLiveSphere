@@ -67,6 +67,12 @@ export const scoreSettings = pgTable("score_settings", {
   isPublished: boolean("is_published").default(false),
 });
 
+// Published medals tracking
+export const publishedMedals = pgTable("published_medals", {
+  medalId: integer("medal_id").primaryKey().references(() => medals.id),
+  publishedAt: timestamp("published_at").defaultNow().notNull(),
+});
+
 // Schemas for data insertion
 export const insertUserSchema = createInsertSchema(users);
 
@@ -130,6 +136,8 @@ export type InsertPublication = z.infer<typeof insertPublicationSchema>;
 
 export type ScoreSettings = typeof scoreSettings.$inferSelect;
 export type UpdateScoreSettings = z.infer<typeof updateScoreSettingsSchema>;
+
+export type PublishedMedal = typeof publishedMedals.$inferSelect;
 
 // Type for TeamScore (for the scoreboard)
 export type TeamScore = {

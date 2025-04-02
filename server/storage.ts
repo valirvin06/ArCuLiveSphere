@@ -6,6 +6,7 @@ import {
   medals,
   publications,
   scoreSettings,
+  publishedMedals,
   type User,
   type InsertUser,
   type Team,
@@ -19,10 +20,12 @@ import {
   type Publication,
   type InsertPublication,
   type ScoreSettings,
+  type PublishedMedal,
   type TeamScore,
   type EventResult,
   type MedalSummary
 } from "@shared/schema";
+import { PgStorage } from "./pg-storage";
 
 // interface for storage methods
 export interface IStorage {
@@ -501,4 +504,7 @@ export class MemStorage implements IStorage {
   }
 }
 
-export const storage = new MemStorage();
+// Export PgStorage instance if DATABASE_URL is available, otherwise use MemStorage
+export const storage = process.env.DATABASE_URL 
+  ? new PgStorage() 
+  : new MemStorage();
